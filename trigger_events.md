@@ -62,7 +62,10 @@ Trigger events have to be sent one event per request.
 | `group_number`   |   integer | *optional*<br>Group number of thing, if thing is inside group | 
 | `thing_serial_number`    |  string |  *optional*<br>You can use serial number as alternative to thing_number/group_number | 
 | `eventtype`  | string |  For now only `triggered` event type is supported |
-| `eventdate`  | timestamp |  Event date/time |
+| `eventdate`  | timestamp |  Event date/time with time zone (ISO 8601), e.g.:<br>**2020-01-01T12:30:00Z** (UTC)<br>**2020-01-01T12:30:00.123Z** (UTC with milli seconds)<br>**2020-01-01T12:30:00+01:00** (CET, Berlin winter time)<br>**2020-01-01T12:30:00+02:00** (CEST, Berlin summer time)|
+
+!> We recommend to always send UTC timestamps. Otherways you might have to deal with DST (summer time) on your side to set the correct UTC offset.<br><br>Regardless of the UTC offset you might send, Foxtag converts and stores all timestamps as UTC (see response) and displays them in the time zone the user has set for the specific location.
+
 
 ```bash
 # Example request to create a trigger event
@@ -108,6 +111,7 @@ curl "https://api.foxtag.io/api/v1/public/trigger_events"
     "status": "success",
     "event": {
       "id": "d011d838-9e76-4b5e-9cda-a14c4ff5b7fb",
+      "eventdate": "2020-01-01T12:30:00Z",
       "job_id": "c90735b0-fcf3-47e0-8ffb-268a8ce0c131", 
       "job_number": "A-123", 
       "job_label": "Wartungstermin 06.02.2020"
